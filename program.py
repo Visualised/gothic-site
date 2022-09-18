@@ -46,18 +46,16 @@ sword_list = [
 
 print_menu()
 while True:
-    try:
-        user_selection = int(input("Wybierz opcje: "))
-    except ValueError:
-        print("Niepoprawna opcja, wybierz opcję ponownie.")
-        continue
+    user_selection = input("Wybierz numer opcji: ")
 
-    if user_selection == 0:
+    if user_selection == "0":
         print_menu()
-    elif user_selection == 1:
+    elif user_selection == "1":
         print_sword_list(sword_list)
-    elif user_selection == 2:
+    elif user_selection == "2":
         sword_index = int(input("Wpisz indeks miecza: "))
         print_sword_details(sword_list, sword_index)
-    elif user_selection == 3:
+    elif user_selection == "3":
         break
+    else:
+        print("Wybrałeś niepoprawny numer opcji.")
