@@ -41,7 +41,7 @@ sword_list = [
     "name": "Miecz Blizny", 
     "damage": 85, 
     "required_strength": 70,
-    }
+    },
 ]
 
 print_menu()
