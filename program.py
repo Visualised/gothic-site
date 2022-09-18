@@ -1,14 +1,11 @@
-import os
-os.system("cls")
-
 def print_sword_list(sword_list):
     for index, item in enumerate(sword_list):
         print(f'{index} - {item["name"]}')
 
-def print_sword_details(list_of_swords, sword_index):
-    print(f'{list_of_swords[sword_index]["name"]}, ' 
-        + f'Obrażenia: {list_of_swords[sword_index]["damage"]}, '
-        + f'Wymagana siła: {list_of_swords[sword_index]["required_strength"]}')
+def print_sword_details(sword_list, sword_index):
+    print(f'{sword_list[sword_index]["name"]}, ' 
+        + f'Obrażenia: {sword_list[sword_index]["damage"]}, '
+        + f'Wymagana siła: {sword_list[sword_index]["required_strength"]}')
 
 
 sword_list = [
