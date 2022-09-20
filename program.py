@@ -1,61 +1,47 @@
-def print_menu():
-    menu = """0 - help (wyświetla się ta pomoc)
-1 - wylistowanie wszystkich nazw mieczy
-2 - pokazanie szczegółów danego miecza wg indeksu
-3 - wyłącz program"""
-    print(menu)
+from flask import Flask, request
 
-def print_sword_list(sword_list):
-    for index, sword in enumerate(sword_list):
-        print(f'{index} - {sword["name"]}')
+app = Flask(__name__)
 
-def print_sword_details(sword_list, sword_index):
-    sword = sword_list[sword_index]
-    print(f'{sword["name"]}, ' 
-        + f'Obrażenia: {sword["damage"]}, '
-        + f'Wymagana siła: {sword["required_strength"]}')
+@app.route("/swords")
+def print_sword_list():
+    return sword_list
 
+@app.route("/swords/<int:id>")
+def print_sword_details(id):
+    if 0 > id or id > (len(sword_list) - 1):
+        return "Your ID is out of range"
+    sword = sword_list[id]
+    return sword
 
 sword_list = [
     {
+    "id": 0,
     "name": "Zardzewiały miecz", 
     "damage": 10, 
     "required_strength": 5,
     },
     {
+    "id": 1,
     "name": "Miecz Świstaka", 
     "damage": 20, 
     "required_strength": 15,
     },
     {
+    "id": 2,
     "name": "Miecz strachu", 
     "damage": 42, 
     "required_strength": 18,
     },
     {
+    "id": 3,
     "name": "Miecz śmierci", 
     "damage": 48, 
     "required_strength": 21,
     },
     {
+    "id": 4,
     "name": "Miecz Blizny", 
     "damage": 85, 
     "required_strength": 70,
     },
 ]
-
-print_menu()
-while True:
-    user_selection = input("Wybierz numer opcji: ")
-
-    if user_selection == "0":
-        print_menu()
-    elif user_selection == "1":
-        print_sword_list(sword_list)
-    elif user_selection == "2":
-        sword_index = int(input("Wpisz indeks miecza: "))
-        print_sword_details(sword_list, sword_index)
-    elif user_selection == "3":
-        break
-    else:
-        print("Wybrałeś niepoprawny numer opcji.")
