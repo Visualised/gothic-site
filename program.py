@@ -1,6 +1,6 @@
-from flask import Flask, request, abort
+from flask import Flask, request
 import uuid
-...
+
 uuid.uuid4()
 
 app = Flask(__name__)
@@ -12,7 +12,7 @@ def print_sword_list():
 @app.route("/swords", methods=["POST"])
 def add_sword():
     json_data = request.get_json()
-    json_data["id"] = uuid4()
+    json_data["id"] = uuid.uuid4()
     sword_list.append(json_data)
     return "Sword has been added", 201
 
