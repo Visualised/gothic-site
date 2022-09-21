@@ -1,8 +1,6 @@
 from flask import Flask, request
 import uuid
 
-uuid.uuid4()
-
 app = Flask(__name__)
 
 @app.route("/swords")
