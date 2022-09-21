@@ -1,5 +1,7 @@
 from flask import Flask, request, abort
-from uuid import uuid4
+import uuid
+...
+uuid.uuid4()
 
 app = Flask(__name__)
 
