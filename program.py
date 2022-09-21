@@ -29,7 +29,7 @@ def delete_sword(id):
     sword = filter_by_id(id, sword_list)
     if not sword:
         return "This ID doesn't exist", 404
-    sword_list = [i for i in sword_list if not (i["id"] == id)]
+    sword_list = [i for i in sword_list if i["id"] != id]
     return f'Sword {sword[0]["name"]} has been deleted.', 200
 
 @app.route("/swords/<id>", methods=["PATCH"])
