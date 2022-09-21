@@ -1,61 +1,80 @@
-def print_menu():
-    menu = """0 - help (wyświetla się ta pomoc)
-1 - wylistowanie wszystkich nazw mieczy
-2 - pokazanie szczegółów danego miecza wg indeksu
-3 - wyłącz program"""
-    print(menu)
+from flask import Flask, request
+import uuid
 
-def print_sword_list(sword_list):
-    for index, sword in enumerate(sword_list):
-        print(f'{index} - {sword["name"]}')
+app = Flask(__name__)
 
-def print_sword_details(sword_list, sword_index):
-    sword = sword_list[sword_index]
-    print(f'{sword["name"]}, ' 
-        + f'Obrażenia: {sword["damage"]}, '
-        + f'Wymagana siła: {sword["required_strength"]}')
+@app.route("/swords")
+def print_sword_list():
+    return sword_list
+
+@app.route("/swords", methods=["POST"])
+def add_sword():
+    json_data = request.get_json()
+    json_data["id"] = uuid.uuid4()
+    sword_list.append(json_data)
+    return "Sword has been added", 201
+
+@app.route("/swords/<id>")
+def print_sword_details(id):
+    sword = filter_by_id(id, sword_list)
+    if not sword:
+        return "This ID doesn't exist", 404
+    return sword[0], 200
+
+@app.route("/swords/<id>", methods=["DELETE"])
+def delete_sword(id):
+    global sword_list
+    sword = filter_by_id(id, sword_list)
+    if not sword:
+        return "This ID doesn't exist", 404
+    sword_list = [i for i in sword_list if i["id"] != id]
+    return f'Sword {sword[0]["name"]} has been deleted.', 200
+
+@app.route("/swords/<id>", methods=["PATCH"])
+def update_sword(id):
+    sword = filter_by_id(id, sword_list)
+    if not sword:
+        return "This ID doesn't exist", 404
+    json_data = request.get_json()
+    sword[0].update(json_data)
+    return "Sword has been updated", 200
+    
+def filter_by_id(id, sequence):
+    return list(filter(lambda sword: sword["id"] == id, sequence))
 
 
 sword_list = [
     {
+    "id": "P4nKuuuurtk4-z-nwidii-k000x",
     "name": "Zardzewiały miecz", 
     "damage": 10, 
     "required_strength": 5,
     },
     {
+    "id": "Jaa444-ni3-chc3-tyl3-z4r4bi4c",
     "name": "Miecz Świstaka", 
     "damage": 20, 
     "required_strength": 15,
     },
     {
+    "id": "pies3k-szcz3sl1wy",
     "name": "Miecz strachu", 
     "damage": 42, 
     "required_strength": 18,
     },
     {
+    "id": "eeeeeeeeeeeeeeeeeeee",
     "name": "Miecz śmierci", 
     "damage": 48, 
     "required_strength": 21,
     },
     {
+    "id": "j3st-d0w0d-n4-t0-ajdi",
     "name": "Miecz Blizny", 
     "damage": 85, 
     "required_strength": 70,
     },
 ]
 
-print_menu()
-while True:
-    user_selection = input("Wybierz numer opcji: ")
-
-    if user_selection == "0":
-        print_menu()
-    elif user_selection == "1":
-        print_sword_list(sword_list)
-    elif user_selection == "2":
-        sword_index = int(input("Wpisz indeks miecza: "))
-        print_sword_details(sword_list, sword_index)
-    elif user_selection == "3":
-        break
-    else:
-        print("Wybrałeś niepoprawny numer opcji.")
+if __name__ == "__main__":
+    app.run()
