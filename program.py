@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 @app.route("/swords")
 def print_sword_list():
-    return sword_list
+    return sword_list, HTTPStatus.OK
 
 @app.route("/swords", methods=["POST"])
 def add_sword():
