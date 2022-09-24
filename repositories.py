@@ -1,34 +1,47 @@
-from data import sword_list
+from data import weapons_list, WeaponType
 import uuid
 
-class InMemorySwordsRepository:
+class InMemoryWeaponsRepository:
 
-    def __init__(self, sword_list) -> None:
-        self.sword_list = sword_list
+    def __init__(self, weapons_list) -> None:
+        self._weapons_list = weapons_list
+
+    def verify_type(self, json_data):
+        try:
+            WeaponType(json_data["type"])
+            return True
+        except ValueError:
+            return False
 
     def list(self):
-        return self.sword_list
+        return self._weapons_list
 
     def get(self, id):
-        sword = list(filter(lambda x: x["id"] == id, self.sword_list))
-        return sword[0] if sword else None
+        weapon = list(filter(lambda x: x["id"] == id, self._weapons_list))
+        return weapon[0] if weapon else None
 
     def add(self, json_data):
         json_data["id"] = uuid.uuid4()
-        self.sword_list.append(json_data)
+        if self.verify_type(json_data):
+            self._weapons_list.append(json_data)
+            return True
+
+        return False
 
     def update(self, id, json_data):
-        sword = self.get(id)
-        if not sword:
+        weapon = self.get(id)
+        if not weapon or not self.verify_type(json_data):
             return False
-        sword.update(json_data)
+
+        weapon.update(json_data) 
         return True
 
     def delete(self, id):
-        sword = self.get(id)
-        if not sword:
+        weapon = self.get(id)
+        if not weapon:
             return False
-        self.sword_list = [i for i in self.sword_list if i["id"] != id]
+
+        self._weapons_list = [i for i in self._weapons_list if i["id"] != id]
         return True
 
-swords_repository = InMemorySwordsRepository(sword_list)
+weapons_repository = InMemoryWeaponsRepository(weapons_list)
