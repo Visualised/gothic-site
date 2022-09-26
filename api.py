@@ -14,7 +14,8 @@ def print_weapon_details(id):
     weapon = weapons_repository.get(id)
     if not weapon:
         return "This ID doesn't exist", HTTPStatus.NOT_FOUND
-    return weapon, HTTPStatus.OK
+    else:
+        return weapon, HTTPStatus.OK
 
 @app.route("/weapons", methods=["POST"])
 def add_weapon():
