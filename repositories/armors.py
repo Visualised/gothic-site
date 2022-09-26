@@ -1,4 +1,5 @@
-import uuid, json, api_errors
+import uuid, json
+from api_errors import ObjectDoesNotExist
 
 json_file_path = "data/armors.json"
 
@@ -24,7 +25,7 @@ class JSONArmorsRepository:
     def get(self, id: str):
         armor = list(filter(lambda x: x["id"] == id, self._json_in_memory))
         if not armor:
-            raise api_errors.ObjectDoesNotExist
+            raise ObjectDoesNotExist
             
         return armor[0]
 

@@ -1,5 +1,6 @@
 from data import WeaponType
-import uuid, json, api_errors
+from api_errors import ObjectDoesNotExist, WrongType
+import uuid, json
 
 json_file_path = "data/weapons.json"
 
@@ -23,7 +24,7 @@ class JSONWeaponsRepository:
         try:
             json_user_data["type"] = WeaponType(json_user_data["type"])
         except ValueError:
-            raise api_errors.WrongType
+            raise WrongType
 
     def list(self):
         return self._json_in_memory
@@ -31,7 +32,7 @@ class JSONWeaponsRepository:
     def get(self, id: str):
         weapon = list(filter(lambda x: x["id"] == id, self._json_in_memory))
         if not weapon:
-            raise api_errors.ObjectDoesNotExist
+            raise ObjectDoesNotExist
             
         return weapon[0]
 
