@@ -1,6 +1,7 @@
 from flask import request, Blueprint
 from http import HTTPStatus
 from repositories.weapons import weapons_repository
+from dataclasses import asdict
 
 weapons_router = Blueprint("weapons_router", __name__, url_prefix="/weapons")
 
@@ -10,7 +11,7 @@ def print_weapon_list():
 
 @weapons_router.route("/<id>")
 def print_weapon_details(id: str):
-    weapon = weapons_repository.get(id)
+    weapon = asdict(weapons_repository.get(id))
     return weapon, HTTPStatus.OK
 
 @weapons_router.route("", methods=["POST"])

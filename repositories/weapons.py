@@ -1,13 +1,18 @@
-from data import WeaponType
+from data import WeaponType, Weapon
 from api_errors import ObjectDoesNotExist, WrongType
+from dataclasses import asdict
 import uuid, json
 
 json_file_path = "data/weapons.json"
 
 class JSONWeaponsRepository:
     def __init__(self, json_file_path: str) -> None:
+        self._weapons_dataclass_list = []
         self._json_in_memory = self.read_from_json(json_file_path)
         self._json_file_path = json_file_path
+        
+        for weapon in self._json_in_memory:
+            self._weapons_dataclass_list.append(Weapon(**weapon))
 
     def read_from_json(self, json_file_path: str):
         try:
@@ -18,7 +23,8 @@ class JSONWeaponsRepository:
 
     def save_to_json(self, json_file_path: str):
         with open(json_file_path, "w+", encoding="utf-8") as f:
-            json.dump(self._json_in_memory, f, indent=2)
+            weapons_list = [asdict(weapon) for weapon in self._weapons_dataclass_list]
+            json.dump(weapons_list, f, indent=2)
 
     def is_valid_type(self, json_user_data: dict):
         try:
@@ -27,33 +33,34 @@ class JSONWeaponsRepository:
             raise WrongType
 
     def list(self):
-        return self._json_in_memory
+        return self._weapons_dataclass_list
 
     def get(self, id: str):
-        weapon = list(filter(lambda x: x["id"] == id, self._json_in_memory))
-        if not weapon:
+        founded_weapon = [weapon for weapon in self._weapons_dataclass_list if weapon.id == id]
+        if not founded_weapon:
             raise ObjectDoesNotExist
             
-        return weapon[0]
+        return founded_weapon[0]
 
     def add(self, json_user_data: dict):
         json_user_data["id"] = str(uuid.uuid4())
         self.is_valid_type(json_user_data)
 
-        self._json_in_memory.append(json_user_data)
+        self._weapons_dataclass_list.append(Weapon(**json_user_data))
         self.save_to_json(self._json_file_path)
 
     def update(self, id, json_user_data: dict):
         self.is_valid_type(json_user_data)
-        weapon = self.get(id)
-        
-        weapon.update(json_user_data)
+        old_weapon = self.get(id)
+        old_weapon_index = self._weapons_dataclass_list.index(old_weapon)
+        self._weapons_dataclass_list[old_weapon_index] = Weapon(**json_user_data, id=old_weapon.id)
+
         self.save_to_json(self._json_file_path)
 
     def delete(self, id: str):
         self.get(id)
 
-        self._json_in_memory = [i for i in self._json_in_memory if i["id"] != id]
+        self._weapons_dataclass_list = [i for i in self._weapons_dataclass_list if i.id != id]
         self.save_to_json(self._json_file_path)
 
 
