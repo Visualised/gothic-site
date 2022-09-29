@@ -14,7 +14,15 @@ class JSONWeaponsRepository:
         for weapon in self._json_in_memory:
             self._weapons_dataclass_list.append(Weapon(**weapon))
 
-    def read_from_json(self, json_file_path: str):
+    @staticmethod
+    def is_valid_type(json_user_data: dict):
+        try:
+            json_user_data["type"] = WeaponType(json_user_data["type"])
+        except ValueError:
+            raise WrongType
+
+    @staticmethod
+    def read_from_json(json_file_path: str):
         try:
             with open(json_file_path, "r", encoding="utf-8") as f:
                 return json.load(f)
@@ -25,12 +33,6 @@ class JSONWeaponsRepository:
         with open(json_file_path, "w+", encoding="utf-8") as f:
             weapons_list = [asdict(weapon) for weapon in self._weapons_dataclass_list]
             json.dump(weapons_list, f, indent=2)
-
-    def is_valid_type(self, json_user_data: dict):
-        try:
-            json_user_data["type"] = WeaponType(json_user_data["type"])
-        except ValueError:
-            raise WrongType
 
     def list(self):
         return self._weapons_dataclass_list

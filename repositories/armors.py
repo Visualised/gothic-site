@@ -14,7 +14,8 @@ class JSONArmorsRepository:
         for armor in self._json_in_memory:
             self._armors_dataclass_list.append(Armor(**armor))
 
-    def read_from_json(self, json_file_path: str):
+    @staticmethod
+    def read_from_json(json_file_path: str):
         try:
             with open(json_file_path, "r", encoding="utf-8") as f:
                 return json.load(f)
