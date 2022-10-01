@@ -8,25 +8,25 @@ json_file_path = "data/weapons.json"
 
 class JSONWeaponsRepository:
     def __init__(self, json_file_path: str) -> None:
-        self._weapons_dataclass_list = []
-        self._json_in_memory = self.read_from_json(json_file_path)
+        self._weapons_dataclass_list = self.read_from_json(json_file_path)
         self._json_file_path = json_file_path
 
-        for weapon in self._json_in_memory:
-            self._weapons_dataclass_list.append(Weapon(**weapon))
-
     @staticmethod
-    def is_valid_type(json_user_data: dict):
+    def clean_data(json_user_data: dict):
         try:
             json_user_data["type"] = WeaponType(json_user_data["type"])
         except ValueError:
             raise WrongType
 
-    @staticmethod
-    def read_from_json(json_file_path: str):
+    def read_from_json(self, json_file_path: str):
         try:
             with open(json_file_path, "r", encoding="utf-8") as f:
-                return json.load(f)
+                temp_data = json.load(f)
+                temp_list = []
+                for weapon in temp_data:
+                    self.clean_data(weapon)
+                    temp_list.append(Weapon(**weapon))
+                return temp_list
         except FileNotFoundError:
             return []
 
@@ -47,13 +47,13 @@ class JSONWeaponsRepository:
 
     def add(self, json_user_data: dict):
         json_user_data["id"] = str(uuid.uuid4())
-        self.is_valid_type(json_user_data)
+        self.clean_data(json_user_data)
 
         self._weapons_dataclass_list.append(Weapon(**json_user_data))
         self.save_to_json(self._json_file_path)
 
     def update(self, id, json_user_data: dict):
-        self.is_valid_type(json_user_data)
+        self.clean_data(json_user_data)
         old_weapon = self.get(id)
         old_weapon_index = self._weapons_dataclass_list.index(old_weapon)
         self._weapons_dataclass_list[old_weapon_index] = Weapon(**json_user_data, id=old_weapon.id)
