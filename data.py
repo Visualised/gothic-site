@@ -1,11 +1,13 @@
 from enum import Enum
 from dataclasses import dataclass
 
+
 class WeaponType(str, Enum):
     SWORD = "sword"
     AXE = "axe"
     BOW = "bow"
     CROSSBOW = "crossbow"
+
 
 @dataclass
 class Weapon:
@@ -13,8 +15,9 @@ class Weapon:
     damage: int
     required_strength: int
     required_dexterity: int
-    type: str
+    type: WeaponType
     id: str
+
 
 @dataclass
 class Armor:

@@ -5,14 +5,18 @@ from dataclasses import asdict
 
 armors_router = Blueprint("armors_router", __name__, url_prefix="/armors")
 
+
 @armors_router.route("")
 def print_armor_list():
-    return armors_repository.list(), HTTPStatus.OK
+    sort_by = request.args.get("sort", "name")
+    return armors_repository.list_sorted_by(sort_by), HTTPStatus.OK
+
 
 @armors_router.route("/<id>")
 def print_armor_details(id: str):
     armor = asdict(armors_repository.get(id))
     return armor, HTTPStatus.OK
+
 
 @armors_router.route("", methods=["POST"])
 def add_armor():
@@ -20,11 +24,13 @@ def add_armor():
     armors_repository.add(json_data)
     return "Armor has been added", HTTPStatus.CREATED
 
+
 @armors_router.route("/<id>", methods=["PATCH"])
 def update_armor(id: str):
     json_data = request.get_json()
     armors_repository.update(id, json_data)
     return "Armor has been updated", HTTPStatus.OK
+
 
 @armors_router.route("/<id>", methods=["DELETE"])
 def delete_armor(id: str):
