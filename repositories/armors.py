@@ -1,14 +1,21 @@
 import uuid, json
 from api_errors import ObjectDoesNotExist
+from data import Armor
+from dataclasses import asdict
 
 json_file_path = "data/armors.json"
 
 class JSONArmorsRepository:
     def __init__(self, json_file_path: str) -> None:
+        self._armors_dataclass_list = []
         self._json_in_memory = self.read_from_json(json_file_path)
         self._json_file_path = json_file_path
+        
+        for armor in self._json_in_memory:
+            self._armors_dataclass_list.append(Armor(**armor))
 
-    def read_from_json(self, json_file_path: str):
+    @staticmethod
+    def read_from_json(json_file_path: str):
         try:
             with open(json_file_path, "r", encoding="utf-8") as f:
                 return json.load(f)
@@ -17,34 +24,36 @@ class JSONArmorsRepository:
 
     def save_to_json(self, json_file_path: str):
         with open(json_file_path, "w+", encoding="utf-8") as f:
-            json.dump(self._json_in_memory, f, indent=2)
+            armors_list = [asdict(armor) for armor in self._armors_dataclass_list]
+            json.dump(armors_list, f, indent=2)
 
     def list(self):
         return self._json_in_memory
 
     def get(self, id: str):
-        armor = list(filter(lambda x: x["id"] == id, self._json_in_memory))
-        if not armor:
+        founded_armor = [armor for armor in self._armors_dataclass_list if armor.id == id]
+        if not founded_armor:
             raise ObjectDoesNotExist
             
-        return armor[0]
+        return founded_armor[0]
 
     def add(self, json_user_data: dict):
         json_user_data["id"] = str(uuid.uuid4())
 
-        self._json_in_memory.append(json_user_data)
+        self._armors_dataclass_list.append(Armor(**json_user_data))
         self.save_to_json(self._json_file_path)
 
     def update(self, id, json_user_data: dict):
-        armor = self.get(id)
+        old_armor = self.get(id)
+        old_armor_index = self._armors_dataclass_list.index(old_armor)
+        self._armors_dataclass_list[old_armor_index] = Armor(**json_user_data, id=old_armor.id)
         
-        armor.update(json_user_data)
         self.save_to_json(self._json_file_path)
 
     def delete(self, id: str):
         self.get(id)
 
-        self._json_in_memory = [i for i in self._json_in_memory if i["id"] != id]
+        self._armors_dataclass_list = [i for i in self._armors_dataclass_list if i.id != id]
         self.save_to_json(self._json_file_path)
 
 
