@@ -5,12 +5,13 @@ import uuid, json
 
 json_file_path = "data/weapons.json"
 
+
 class JSONWeaponsRepository:
     def __init__(self, json_file_path: str) -> None:
         self._weapons_dataclass_list = []
         self._json_in_memory = self.read_from_json(json_file_path)
         self._json_file_path = json_file_path
-        
+
         for weapon in self._json_in_memory:
             self._weapons_dataclass_list.append(Weapon(**weapon))
 
@@ -41,7 +42,7 @@ class JSONWeaponsRepository:
         founded_weapon = [weapon for weapon in self._weapons_dataclass_list if weapon.id == id]
         if not founded_weapon:
             raise ObjectDoesNotExist
-            
+
         return founded_weapon[0]
 
     def add(self, json_user_data: dict):
@@ -65,13 +66,28 @@ class JSONWeaponsRepository:
         self._weapons_dataclass_list = [i for i in self._weapons_dataclass_list if i.id != id]
         self.save_to_json(self._json_file_path)
 
+    def list_sorted_by(self, sort_by: str):
+        SORTED_BY = {
+            "damage": lambda x: x.damage,
+            "required_strength": lambda x: x.required_strength,
+            "required_dexterity": lambda x: x.required_dexterity,
+            "name": lambda x: x.name,
+        }
+
+        if sort_by[0] == "-":
+            is_reversed = True
+            sort_by = sort_by[1:]
+        else:
+            is_reversed = False
+
+        return sorted(self._weapons_dataclass_list, key=SORTED_BY[sort_by], reverse=is_reversed)
+
 
 # not updated for type hinting and handlers, for inheritance demonstration only
 class InMemoryWeaponsRepository:
-
     def __init__(self, weapons_list) -> None:
         self._weapons_list = weapons_list
-        
+
     def list(self):
         return self._weapons_list
 
@@ -93,7 +109,7 @@ class InMemoryWeaponsRepository:
         if not weapon or not self.verify_type(json_data):
             return False
 
-        weapon.update(json_data) 
+        weapon.update(json_data)
         return True
 
     def delete(self, id):
@@ -103,5 +119,6 @@ class InMemoryWeaponsRepository:
 
         self._weapons_list = [i for i in self._weapons_list if i["id"] != id]
         return True
+
 
 weapons_repository = JSONWeaponsRepository(json_file_path)

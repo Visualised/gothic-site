@@ -5,20 +5,25 @@ from dataclasses import asdict
 
 weapons_router = Blueprint("weapons_router", __name__, url_prefix="/weapons")
 
+
 @weapons_router.route("")
 def print_weapon_list():
-    return weapons_repository.list(), HTTPStatus.OK
+    sort_by = request.args.get("sort", "name")
+    return weapons_repository.list_sorted_by(sort_by), HTTPStatus.OK
+
 
 @weapons_router.route("/<id>")
 def print_weapon_details(id: str):
     weapon = asdict(weapons_repository.get(id))
     return weapon, HTTPStatus.OK
 
+
 @weapons_router.route("", methods=["POST"])
 def add_weapon():
     json_data = request.get_json()
     weapons_repository.add(json_data)
     return "Weapon has been added", HTTPStatus.CREATED
+
 
 @weapons_router.route("/<id>", methods=["PATCH"])
 def update_weapon(id: str):
