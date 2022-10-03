@@ -9,7 +9,9 @@ weapons_router = Blueprint("weapons_router", __name__, url_prefix="/weapons")
 @weapons_router.route("")
 def print_weapon_list():
     sort_by = request.args.get("sort", "name")
-    return weapons_repository.list_sorted_by(sort_by), HTTPStatus.OK
+    page = request.args.get("page", "0")
+    page_size = request.args.get("page_size", "10")
+    return weapons_repository.list_sorted_by(sort_by, int(page), int(page_size)), HTTPStatus.OK
 
 
 @weapons_router.route("/<id>")

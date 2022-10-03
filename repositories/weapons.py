@@ -66,7 +66,7 @@ class JSONWeaponsRepository:
         self._weapons_dataclass_list = [i for i in self._weapons_dataclass_list if i.id != id]
         self.save_to_json(self._json_file_path)
 
-    def list_sorted_by(self, sort_by: str):
+    def list_sorted_by(self, sort_by: str, page: int, page_size: int):
         SORTED_BY = {
             "damage": lambda x: x.damage,
             "required_strength": lambda x: x.required_strength,
@@ -80,7 +80,12 @@ class JSONWeaponsRepository:
         else:
             is_reversed = False
 
-        return sorted(self._weapons_dataclass_list, key=SORTED_BY[sort_by], reverse=is_reversed)
+        start = page * page_size
+        end = (page * page_size) + page_size
+        if end > 20:
+            end = 20
+
+        return sorted(self._weapons_dataclass_list[start:end], key=SORTED_BY[sort_by], reverse=is_reversed)
 
 
 # not updated for type hinting and handlers, for inheritance demonstration only
