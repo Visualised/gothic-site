@@ -19,5 +19,4 @@ class JSONArmorsRepository(AbstractJSONRepository):
         "name": lambda x: x.name,
     }
 
-
 armors_repository = JSONArmorsRepository(json_file_path)

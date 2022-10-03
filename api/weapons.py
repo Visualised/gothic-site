@@ -16,7 +16,7 @@ def print_weapon_list():
         return weapons_repository.list_sorted_by(sort_by, int(page), int(page_size)), HTTPStatus.OK
     except:
         return "Wrong URL parameters", HTTPStatus.BAD_REQUEST
-
+        
 
 @weapons_router.route("/<id>")
 def print_weapon_details(id: str):

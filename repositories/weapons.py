@@ -25,5 +25,4 @@ class JSONWeaponsRepository(AbstractJSONRepository):
         except ValueError:
             raise WrongType
 
-
 weapons_repository = JSONWeaponsRepository(json_file_path)
