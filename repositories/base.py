@@ -41,13 +41,11 @@ class AbstractJSONRepository:
 
     def add(self, json_user_data: dict):
         json_user_data["id"] = str(uuid.uuid4())
-        self.clean_data(json_user_data)
 
         self._dataclass_list.append(self.MODEL(**json_user_data))
         self.save_to_json(self._json_file_path)
 
     def update(self, id, json_user_data: dict):
-        self.clean_data(json_user_data)
         old_object = self.get(id)
         old_object_index = self._dataclass_list.index(old_object)
         self._dataclass_list[old_object_index] = self.MODEL(**json_user_data, id=old_object.id)
