@@ -2,14 +2,20 @@ from flask import request, Blueprint
 from http import HTTPStatus
 from repositories.armors import armors_repository
 from dataclasses import asdict
+import data
 
 armors_router = Blueprint("armors_router", __name__, url_prefix="/armors")
 
 
 @armors_router.route("")
 def print_armor_list():
-    sort_by = request.args.get("sort", "name")
-    return armors_repository.list_sorted_by(sort_by), HTTPStatus.OK
+    sort_by = request.args.get(data.SORT_BY_URL_PARAMETER_NAME, data.DEFAULT_SORT_BY)
+    page = request.args.get(data.PAGE_NUMBER_URL_PARAMETER_NAME, data.DEFAULT_PAGE_NUMBER)
+    page_size = request.args.get(data.PAGE_SIZE_URL_PARAMETER_NAME, data.DEFAULT_PAGE_SIZE)
+    try:
+        return armors_repository.list_sorted_by(sort_by, int(page), int(page_size)), HTTPStatus.OK
+    except:
+        return "Wrong URL parameters", HTTPStatus.BAD_REQUEST
 
 
 @armors_router.route("/<id>")
