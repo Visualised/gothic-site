@@ -1,10 +1,9 @@
 from data import WeaponType, Weapon
 from api_errors import WrongType
+from repositories.base import AbstractJSONRepository
 import uuid
 
 json_file_path = "data/weapons.json"
-
-from repositories.base import AbstractJSONRepository
 
 
 class JSONWeaponsRepository(AbstractJSONRepository):
@@ -30,8 +29,8 @@ class JSONWeaponsRepository(AbstractJSONRepository):
         self.clean_data(json_user_data)
         old_weapon = self.get(id)
         old_weapon_index = self._dataclass_list.index(old_weapon)
-        self._dataclass_list[old_weapon_index] = self.MODEL(**json_user_data, id=old_weapon.id)
 
+        self._dataclass_list[old_weapon_index] = self.MODEL(**json_user_data, id=old_weapon.id)
         self.save_to_json(self._json_file_path)
 
     def add(self, json_user_data: dict):

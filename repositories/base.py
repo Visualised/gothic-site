@@ -21,16 +21,13 @@ class AbstractJSONRepository:
             with open(json_file_path, "r", encoding="utf-8") as f:
                 temp_data = json.load(f)
                 return [self.MODEL(**object) for object in temp_data]
-        except FileNotFoundError:
+        except (FileNotFoundError, json.JSONDecodeError):
             return []
 
     def save_to_json(self, json_file_path: str):
         with open(json_file_path, "w+", encoding="utf-8") as f:
             object_list = [asdict(object) for object in self._dataclass_list]
             json.dump(object_list, f, indent=2)
-
-    def list(self):
-        return self._dataclass_list
 
     def get(self, id: str):
         found_object = [object for object in self._dataclass_list if object.id == id]
@@ -48,8 +45,8 @@ class AbstractJSONRepository:
     def update(self, id, json_user_data: dict):
         old_object = self.get(id)
         old_object_index = self._dataclass_list.index(old_object)
-        self._dataclass_list[old_object_index] = self.MODEL(**json_user_data, id=old_object.id)
 
+        self._dataclass_list[old_object_index] = self.MODEL(**json_user_data, id=old_object.id)
         self.save_to_json(self._json_file_path)
 
     def delete(self, id: str):
@@ -58,7 +55,7 @@ class AbstractJSONRepository:
         self._dataclass_list = [i for i in self._dataclass_list if i.id != id]
         self.save_to_json(self._json_file_path)
 
-    def list_sorted_by(self, sort_by: str, page: int, page_size: int):
+    def list(self, sort_by: str, page: int, page_size: int):
 
         if sort_by[0] == "-":
             is_reversed = True
@@ -66,9 +63,10 @@ class AbstractJSONRepository:
         else:
             is_reversed = False
 
+        if page_size > MAX_PAGE_SIZE:
+            page_size = MAX_PAGE_SIZE
         start = page * page_size
-        end = (page * page_size) + page_size
-        if end > MAX_PAGE_SIZE:
-            end = MAX_PAGE_SIZE
+        end = (page + 1) * page_size
 
-        return sorted(self._dataclass_list[start:end], key=self.SORTED_BY[sort_by], reverse=is_reversed)
+        sorted_list = sorted(self._dataclass_list, key=self.SORTED_BY[sort_by], reverse=is_reversed)
+        return sorted_list[start:end]

@@ -1,0 +1,26 @@
+[
+  {
+    "name": "ddddTestowy Miecz Dwa",
+    "damage": 100,
+    "required_strength": 11,
+    "required_dexterity": 6,
+    "type": "sword",
+    "id": "6501ksdu-usta-4079-8b74-760cbc575b45"
+  },
+  {
+    "name": "aaaaTestowy Miecz Trzy",
+    "damage": 200,
+    "required_strength": 44,
+    "required_dexterity": 12,
+    "type": "bow",
+    "id": "65017267-oczy-4079-8b74-760cbc575b45"
+  },
+  {
+    "name": "bbbbTestowy Miecz Cztery",
+    "damage": 200,
+    "required_strength": 44,
+    "required_dexterity": 12,
+    "type": "bow",
+    "id": "65017267-oczy-4079-nosy-760cbc575b45"
+  }
+]

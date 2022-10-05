@@ -1,0 +1,47 @@
+[
+  {
+    "name": "aaaaaaaSuper Armor",
+    "weapon_resistance": 223452,
+    "ranged_resistance": 223452,
+    "fire_resistance": 663453456,
+    "magic_resistance": 234522,
+    "price": 21345370,
+    "id": "645cc691-b59f-4860-8ba0-418b9ak8a672"
+  },
+  {
+    "name": "bbbbbbSwietny Armor",
+    "weapon_resistance": 223452,
+    "ranged_resistance": 223452,
+    "fire_resistance": 663453456,
+    "magic_resistance": 234522,
+    "price": 21345370,
+    "id": "345cc691-b59f-4860-8ba0-418b9ae8a672"
+  },
+  {
+    "name": "cccccEkstra Armor",
+    "weapon_resistance": 223452,
+    "ranged_resistance": 223452,
+    "fire_resistance": 663453456,
+    "magic_resistance": 234522,
+    "price": 21345370,
+    "id": "645cc691-b59f-4860-8ba0-418b9le8a672"
+  },
+  {
+    "name": "dddddKolczy Armor",
+    "weapon_resistance": 223452,
+    "ranged_resistance": 223452,
+    "fire_resistance": 663453456,
+    "magic_resistance": 234522,
+    "price": 21345370,
+    "id": "645cck91-b59f-4860-8ba0-418b9ae8a672"
+  },
+  {
+    "name": "eeeeeeeWilczy Armor",
+    "weapon_resistance": 223452,
+    "ranged_resistance": 223452,
+    "fire_resistance": 663453456,
+    "magic_resistance": 234522,
+    "price": 21345370,
+    "id": "3609958d-f0f2-40e1-96b5-4a9ab162abc5"
+  }
+]
