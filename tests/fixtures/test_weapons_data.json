@@ -22,5 +22,21 @@
     "required_dexterity": 12,
     "type": "bow",
     "id": "65017267-oczy-4079-nosy-760cbc575b45"
+  },
+  {
+    "name": "ddddTestowy Miecz Piec",
+    "damage": 150,
+    "required_strength": 66,
+    "required_dexterity": 24,
+    "type": "crossbow",
+    "id": "65017267-oczy-plec-nosy-760cbc575b45"
+  },
+  {
+    "name": "eeeeTestowy Miecz Szesc",
+    "damage": 188,
+    "required_strength": 55,
+    "required_dexterity": 18,
+    "type": "axe",
+    "id": "65017267-oczy-mapa-nosy-760cbc575b45"
   }
 ]

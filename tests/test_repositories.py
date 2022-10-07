@@ -71,7 +71,7 @@ class Test_JSONWeaponsRepository(unittest.TestCase):
         mock_page_size = 10
         sorted_list = self.weapons_repository.list(mock_sort_by, mock_page_number, mock_page_size)
 
-        self.assertEqual(sorted_list[0].name, "ddddTestowy Miecz Dwa")
+        self.assertEqual(sorted_list[0].name, "eeeeTestowy Miecz Szesc")
 
 
 class Test_JSONArmorsRepository(unittest.TestCase):
