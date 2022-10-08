@@ -1,0 +1,50 @@
+[
+  {
+    "name": "ccccTestowy Miecz Dwa",
+    "damage": 100,
+    "required_strength": 11,
+    "required_dexterity": 6,
+    "type": "sword",
+    "id": "6501ksdu-usta-4079-8b74-760cbc575b45"
+  },
+  {
+    "name": "aaaaTestowy Miecz Trzy",
+    "damage": 200,
+    "required_strength": 44,
+    "required_dexterity": 12,
+    "type": "bow",
+    "id": "65017267-oczy-4079-8b74-760cbc575b45"
+  },
+  {
+    "name": "bbbbTestowy Miecz Cztery",
+    "damage": 220,
+    "required_strength": 44,
+    "required_dexterity": 12,
+    "type": "bow",
+    "id": "65017267-oczy-4079-nosy-760cbc575b45"
+  },
+  {
+    "name": "ddddTestowy Miecz Piec",
+    "damage": 240,
+    "required_strength": 66,
+    "required_dexterity": 24,
+    "type": "crossbow",
+    "id": "65017267-oczy-plec-nosy-760cbc575b45"
+  },
+  {
+    "name": "eeeeTestowy Miecz Szesc",
+    "damage": 188,
+    "required_strength": 55,
+    "required_dexterity": 18,
+    "type": "axe",
+    "id": "65017267-oczy-mapa-nosy-760cbc575b45"
+  },
+  {
+    "name": "Wielki Mjeczyk",
+    "damage": 77,
+    "required_strength": 33,
+    "required_dexterity": 9,
+    "type": "sword",
+    "id": "2ed6441c-0ddf-4569-a7dd-cbfc9748aa75"
+  }
+]
