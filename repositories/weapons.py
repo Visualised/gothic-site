@@ -1,7 +1,6 @@
 from data import WeaponType, Weapon
 from api_errors import WrongType
 from repositories.base import AbstractJSONRepository
-import uuid
 
 json_file_path = "data/weapons.json"
 
