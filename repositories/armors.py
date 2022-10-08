@@ -1,7 +1,5 @@
 from data import Armor
 
-json_file_path = "data/armors.json"
-
 from repositories.base import AbstractJSONRepository
 
 
@@ -18,5 +16,3 @@ class JSONArmorsRepository(AbstractJSONRepository):
         "weapon_resistance": lambda x: x.weapon_resistance,
         "name": lambda x: x.name,
     }
-
-armors_repository = JSONArmorsRepository(json_file_path)

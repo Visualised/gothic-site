@@ -1,9 +1,9 @@
 import unittest
 from unittest.mock import Mock, patch
 from api_errors import ObjectDoesNotExist
-from app import app
-from repositories.weapons import JSONWeaponsRepository, weapons_repository
-from repositories.armors import JSONArmorsRepository, armors_repository
+from app import create_app
+from repositories.weapons import JSONWeaponsRepository
+from repositories.armors import JSONArmorsRepository
 from dataclasses import asdict
 
 JSON_FILE_PATH_WEAPONS = "tests/fixtures/test_weapons_data.json"
@@ -12,11 +12,9 @@ JSON_FILE_PATH_ARMORS = "tests/fixtures/test_armors_data.json"
 
 class Test_WeaponsRouter(unittest.TestCase):
     def setUp(self):
-        app.testing = True
         self.test_weapons_repository = JSONWeaponsRepository(JSON_FILE_PATH_WEAPONS)
-        weapons_repository._json_file_path = JSON_FILE_PATH_WEAPONS
-        weapons_repository._dataclass_list = weapons_repository.read_from_json(JSON_FILE_PATH_WEAPONS)
-        self.app_tester = app.test_client()
+        self.app = create_app(self.test_weapons_repository, None, testing=True)
+        self.app_tester = self.app.test_client()
         self.mock_json_user_data = {
             "name": "Wielki Mjeczyk",
             "damage": 77,
@@ -73,11 +71,9 @@ class Test_WeaponsRouter(unittest.TestCase):
 
 class Test_ArmorsRouter(unittest.TestCase):
     def setUp(self):
-        app.testing = True
         self.test_armors_repository = JSONArmorsRepository(JSON_FILE_PATH_ARMORS)
-        armors_repository._json_file_path = JSON_FILE_PATH_ARMORS
-        armors_repository._dataclass_list = armors_repository.read_from_json(JSON_FILE_PATH_ARMORS)
-        self.app_tester = app.test_client()
+        self.app = create_app(None, self.test_armors_repository, testing=True)
+        self.app_tester = self.app.test_client()
         self.mock_json_user_data = {
             "name": "ffffffMega Armor",
             "weapon_resistance": 300,

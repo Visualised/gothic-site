@@ -2,8 +2,6 @@ from data import WeaponType, Weapon
 from api_errors import WrongType
 from repositories.base import AbstractJSONRepository
 
-json_file_path = "data/weapons.json"
-
 
 class JSONWeaponsRepository(AbstractJSONRepository):
     def __init__(self, json_file_path: str) -> None:
@@ -14,7 +12,7 @@ class JSONWeaponsRepository(AbstractJSONRepository):
         "damage": lambda x: x.damage,
         "required_strength": lambda x: x.required_strength,
         "required_dexterity": lambda x: x.required_dexterity,
-        "name": lambda x: x.name,
+        "name": lambda x: x.name.lower(),
     }
 
     @staticmethod
@@ -23,6 +21,3 @@ class JSONWeaponsRepository(AbstractJSONRepository):
             json_user_data["type"] = WeaponType(json_user_data["type"])
         except ValueError:
             raise WrongType
-
-
-weapons_repository = JSONWeaponsRepository(json_file_path)
