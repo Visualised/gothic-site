@@ -8,6 +8,8 @@ DEFAULT_SORT_BY = "name"
 DEFAULT_PAGE_NUMBER = 0
 DEFAULT_PAGE_SIZE = 10
 MAX_PAGE_SIZE = 20
+WEAPONS_REPOSITORY_JSON_PATH = "data/weapons.json"
+ARMORS_REPOSITORY_JSON_PATH = "data/armors.json"
 
 
 class WeaponType(str, Enum):
@@ -15,6 +17,16 @@ class WeaponType(str, Enum):
     AXE = "axe"
     BOW = "bow"
     CROSSBOW = "crossbow"
+
+
+class Guild(str, Enum):
+    MERCENARY = "mercenary"
+    DRAGON_HUNTER = "dragon hunter"
+    MILITIA = "militia"
+    PALADIN = "paladin"
+    NOVICE = "novice"
+    MAGICIAN = "magician"
+    NEUTRAL = "neutral"
 
 
 @dataclass
@@ -35,4 +47,14 @@ class Armor:
     fire_resistance: int
     magic_resistance: int
     price: int
-    id: int
+    id: str
+
+
+@dataclass
+class NPC:
+    name: str
+    hp: int
+    mana: int
+    guild: str
+    equipment: list
+    id: str

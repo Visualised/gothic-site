@@ -13,7 +13,7 @@ JSON_FILE_PATH_ARMORS = "tests/fixtures/test_armors_data.json"
 class Test_WeaponsRouter(unittest.TestCase):
     def setUp(self):
         self.test_weapons_repository = JSONWeaponsRepository(JSON_FILE_PATH_WEAPONS)
-        self.app = create_app(self.test_weapons_repository, None, testing=True)
+        self.app = create_app(self.test_weapons_repository, None, None, testing=True)
         self.app_tester = self.app.test_client()
         self.mock_json_user_data = {
             "name": "Wielki Mjeczyk",
@@ -72,7 +72,7 @@ class Test_WeaponsRouter(unittest.TestCase):
 class Test_ArmorsRouter(unittest.TestCase):
     def setUp(self):
         self.test_armors_repository = JSONArmorsRepository(JSON_FILE_PATH_ARMORS)
-        self.app = create_app(None, self.test_armors_repository, testing=True)
+        self.app = create_app(None, self.test_armors_repository, None, testing=True)
         self.app_tester = self.app.test_client()
         self.mock_json_user_data = {
             "name": "ffffffMega Armor",

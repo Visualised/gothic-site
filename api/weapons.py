@@ -36,7 +36,7 @@ class WeaponsAPI(MethodView):
         self.weapons_repository.add(json_data)
         return "Weapon has been added", HTTPStatus.CREATED
 
-    def patch(self, id):
+    def patch(self, id: str):
         json_data = request.get_json()
         self.weapons_repository.update(id, json_data)
         return "Weapon has been updated", HTTPStatus.OK

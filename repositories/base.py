@@ -25,7 +25,7 @@ class AbstractJSONRepository:
             with open(json_file_path, "r", encoding="utf-8") as f:
                 temp_data = json.load(f)
                 return [self.MODEL(**object) for object in temp_data]
-        except (FileNotFoundError):
+        except FileNotFoundError:
             return []
 
     def save_to_json(self):
@@ -47,7 +47,7 @@ class AbstractJSONRepository:
         self._dataclass_list.append(self.MODEL(**json_user_data))
         self.save_to_json()
 
-    def update(self, id, json_user_data: dict):
+    def update(self, id: str, json_user_data: dict):
         self.clean_data(json_user_data)
         old_object = self.get(id)
         old_object_index = self._dataclass_list.index(old_object)
