@@ -1,0 +1,57 @@
+[
+    {
+      "name": "Gorn",
+      "hp": 570,
+      "mana": 50,
+      "guild": "mercenary",
+      "equipment": [
+        "weapon:89f1a0b2-22e7-4e36-8755-107ee4f56644",
+        "armor:345cc691-b59f-4860-8ba0-418b9ae8a672"
+      ],
+      "id": "ad2e268e-07a2-47fe-abd4-39c7c881c7c6"
+    },
+    {
+      "name": "Lothar",
+      "hp": 1000,
+      "mana": 20,
+      "guild": "paladin",
+      "equipment": [
+        "weapon:89f1a0b2-22e7-4e36-8755-107ee4f56644",
+        "armor:345cc691-b59f-4860-8ba0-418b9ae8a672"
+      ],
+      "id": "8ffc6772-b537-484f-b77a-c6eae49ff9be"
+    },
+    {
+      "name": "Bezimienny",
+      "hp": 420,
+      "mana": 88,
+      "guild": "dragon hunter",
+      "equipment": [
+        "weapon:65017267-oczy-4079-8b74-760cbc575b45",
+        "armor:645cck91-oiio-4860-8ba0-418b9ae8a672"
+      ],
+      "id": "d21dd4b5-db0f-40dc-99d2-45ad39534e5f"
+    },
+    {
+      "name": "Xardas",
+      "hp": 100,
+      "mana": 500,
+      "guild": "magician",
+      "equipment": [
+        "weapon:65017267-oczy-4079-8b74-760cbc575b45",
+        "armor:645cck91-oiio-4860-8ba0-418b9ae8a672"
+      ],
+      "id": "ddac20ed-8033-44b1-b67e-51cd9341fee9"
+    },
+    {
+      "name": "Lord Hagen",
+      "hp": 666,
+      "mana": 25,
+      "guild": "paladin",
+      "equipment": [
+        "weapon:65017267-oczy-4079-8b74-760cbc575b45",
+        "armor:e9c1d216-8899-8080-86cd-8d3cb0e76515"
+      ],
+      "id": "970c0738-5e5b-42cd-8372-5fcbbf7b49a8"
+    }
+  ]

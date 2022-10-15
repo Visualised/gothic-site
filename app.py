@@ -6,7 +6,7 @@ from api_errors import APIError
 from controllers.npc_controller import NPCController
 from repositories.armors import JSONArmorsRepository
 from repositories.weapons import JSONWeaponsRepository
-from repositories.NPC import JSONNPCRepository
+from repositories.npc import JSONNPCRepository
 from data import (
     WEAPONS_REPOSITORY_JSON_PATH,
     ARMORS_REPOSITORY_JSON_PATH,
