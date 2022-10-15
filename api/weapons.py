@@ -15,13 +15,12 @@ from data import (
 
 class WeaponsAPI(MethodView):
     def __init__(self, weapons_repository: JSONWeaponsRepository):
-        super().__init__()
         self.weapons_repository = weapons_repository
 
     def get(self, id: str):
         if id:
-            weapon = asdict(self.weapons_repository.get(id))
-            return weapon, HTTPStatus.OK
+            weapon = self.weapons_repository.get(id)
+            return asdict(weapon), HTTPStatus.OK
         else:
             sort_by = request.args.get(SORT_BY_URL_PARAMETER_NAME, DEFAULT_SORT_BY)
             page = request.args.get(PAGE_NUMBER_URL_PARAMETER_NAME, DEFAULT_PAGE_NUMBER)

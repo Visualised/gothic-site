@@ -1,5 +1,4 @@
 from data import Armor
-
 from repositories.base import AbstractJSONRepository
 
 
@@ -14,5 +13,5 @@ class JSONArmorsRepository(AbstractJSONRepository):
         "fire_resistance": lambda x: x.fire_resistance,
         "ranged_resistance": lambda x: x.ranged_resistance,
         "weapon_resistance": lambda x: x.weapon_resistance,
-        "name": lambda x: x.name,
+        "name": lambda x: x.name.lower(),
     }

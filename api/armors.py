@@ -15,13 +15,12 @@ from data import (
 
 class ArmorsAPI(MethodView):
     def __init__(self, armors_repository: JSONArmorsRepository):
-        super().__init__()
         self.armors_repository = armors_repository
 
     def get(self, id: str):
         if id:
-            armor = asdict(self.armors_repository.get(id))
-            return armor, HTTPStatus.OK
+            armor = self.armors_repository.get(id)
+            return asdict(armor), HTTPStatus.OK
         else:
             sort_by = request.args.get(SORT_BY_URL_PARAMETER_NAME, DEFAULT_SORT_BY)
             page = request.args.get(PAGE_NUMBER_URL_PARAMETER_NAME, DEFAULT_PAGE_NUMBER)

@@ -1,8 +1,8 @@
 from flask import request
 from flask.views import MethodView
 from http import HTTPStatus
-from repositories.NPC import JSONNPCRepository
-from repositories.NPC_Controller import NPC_Controller
+from controllers.npc_controller import NPCController
+from dataclasses import asdict
 from data import (
     SORT_BY_URL_PARAMETER_NAME,
     PAGE_NUMBER_URL_PARAMETER_NAME,
@@ -14,14 +14,13 @@ from data import (
 
 
 class NPCAPI(MethodView):
-    def __init__(self, npc_repository: JSONNPCRepository):
-        super().__init__()
-        self.npc_controller = NPC_Controller(npc_repository)
+    def __init__(self, npc_controller: NPCController):
+        self.npc_controller = npc_controller
 
     def get(self, id: str):
         if id:
             npc = self.npc_controller.get(id)
-            return npc, HTTPStatus.OK
+            return asdict(npc), HTTPStatus.OK
         else:
             sort_by = request.args.get(SORT_BY_URL_PARAMETER_NAME, DEFAULT_SORT_BY)
             page = request.args.get(PAGE_NUMBER_URL_PARAMETER_NAME, DEFAULT_PAGE_NUMBER)
@@ -29,7 +28,7 @@ class NPCAPI(MethodView):
             try:
                 return self.npc_controller.list(sort_by, int(page), int(page_size)), HTTPStatus.OK
             except ValueError:
-                return "page and page_size parameters needs to be an int", HTTPStatus.BAD_REQUEST
+                return '"page" and "page_size" parameters needs to be an int', HTTPStatus.BAD_REQUEST
 
     def post(self):
         json_data = request.get_json()

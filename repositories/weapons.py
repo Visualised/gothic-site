@@ -18,6 +18,6 @@ class JSONWeaponsRepository(AbstractJSONRepository):
     @staticmethod
     def clean_data(json_user_data: dict):
         try:
-            json_user_data["type"] = WeaponType(json_user_data["type"])
-        except ValueError:
+            json_user_data["type"] = WeaponType(json_user_data["type"].lower())
+        except (ValueError, KeyError):
             raise WrongType

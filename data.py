@@ -10,6 +10,7 @@ DEFAULT_PAGE_SIZE = 10
 MAX_PAGE_SIZE = 20
 WEAPONS_REPOSITORY_JSON_PATH = "data/weapons.json"
 ARMORS_REPOSITORY_JSON_PATH = "data/armors.json"
+NPC_REPOSITORY_FILE_PATH = "data/npc.json"
 
 
 class WeaponType(str, Enum):
@@ -56,5 +57,5 @@ class NPC:
     hp: int
     mana: int
     guild: str
-    equipment: list
+    equipment: list[str]
     id: str
