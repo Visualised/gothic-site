@@ -1,5 +1,5 @@
 from flask import Flask
-from api.NPC import NPCAPI
+from api.npc import NPCAPI
 from api.weapons import WeaponsAPI
 from api.armors import ArmorsAPI
 from api_errors import APIError
