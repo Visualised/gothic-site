@@ -1,5 +1,4 @@
 from dataclasses import asdict
-from data import NPC
 
 
 class NPCController:
@@ -9,20 +8,38 @@ class NPCController:
         self.armors_repository = armors_repository
 
     def replace_equipment_data(self, npc_to_edit):
-        npc_to_edit_copy = NPC(**asdict(npc_to_edit))
+        npc_to_edit_copy = asdict(npc_to_edit)
 
         READ_EQUIPMENT_DATA = {
             "weapon": self.weapons_repository.get,
             "armor": self.armors_repository.get,
         }
 
-        for current_index, item in enumerate(npc_to_edit_copy.equipment):
-            item_type, item_id = item.split(":")
-            if item_type in READ_EQUIPMENT_DATA.keys():
-                equipment_data = READ_EQUIPMENT_DATA[item_type](item_id)
-                npc_to_edit_copy.equipment[current_index] = equipment_data
+        try:
+            for current_index, item in enumerate(npc_to_edit_copy["equipment"]):
+                item_type, item_id = item.split(":")
+                if item_type in READ_EQUIPMENT_DATA.keys():
+                    equipment_data = READ_EQUIPMENT_DATA[item_type](item_id)
+                    npc_to_edit_copy["equipment"][current_index] = equipment_data
 
-        return npc_to_edit_copy
+            return npc_to_edit_copy
+        except KeyError:
+            return npc_to_edit_copy
+
+        # npc_to_edit_copy = NPC(**asdict(npc_to_edit))
+
+        # READ_EQUIPMENT_DATA = {
+        #     "weapon": self.weapons_repository.get,
+        #     "armor": self.armors_repository.get,
+        # }
+
+        # for current_index, item in enumerate(npc_to_edit_copy.equipment):
+        #     item_type, item_id = item.split(":")
+        #     if item_type in READ_EQUIPMENT_DATA.keys():
+        #         equipment_data = READ_EQUIPMENT_DATA[item_type](item_id)
+        #         npc_to_edit_copy.equipment[current_index] = equipment_data
+
+        # return npc_to_edit_copy
 
     def get(self, id: str):
         return self.replace_equipment_data(self.npc_repository.get(id))

@@ -2,7 +2,6 @@ from flask import request
 from flask.views import MethodView
 from http import HTTPStatus
 from controllers.npc_controller import NPCController
-from dataclasses import asdict
 from data import (
     SORT_BY_URL_PARAMETER_NAME,
     PAGE_NUMBER_URL_PARAMETER_NAME,
@@ -20,7 +19,7 @@ class NPCAPI(MethodView):
     def get(self, id: str):
         if id:
             npc = self.npc_controller.get(id)
-            return asdict(npc), HTTPStatus.OK
+            return npc, HTTPStatus.OK
         else:
             sort_by = request.args.get(SORT_BY_URL_PARAMETER_NAME, DEFAULT_SORT_BY)
             page = request.args.get(PAGE_NUMBER_URL_PARAMETER_NAME, DEFAULT_PAGE_NUMBER)

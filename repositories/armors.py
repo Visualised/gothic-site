@@ -1,5 +1,6 @@
 from data import Armor
-from repositories.base import AbstractJSONRepository
+from repositories.base import AbstractJSONRepository, AbstractDBRepository
+from models.armors import ArmorDBModel
 
 
 class JSONArmorsRepository(AbstractJSONRepository):
@@ -14,4 +15,17 @@ class JSONArmorsRepository(AbstractJSONRepository):
         "ranged_resistance": lambda x: x.ranged_resistance,
         "weapon_resistance": lambda x: x.weapon_resistance,
         "name": lambda x: x.name.lower(),
+    }
+
+
+class DBArmorsRepository(AbstractDBRepository):
+    DB_MODEL = ArmorDBModel
+    ORDER_BY = {
+        "id": ArmorDBModel.id,
+        "name": ArmorDBModel.name,
+        "weapon_resistance": ArmorDBModel.weapon_resistance,
+        "ranged_resistance": ArmorDBModel.ranged_resistance,
+        "fire_resistance": ArmorDBModel.fire_resistance,
+        "magic_resistance": ArmorDBModel.magic_resistance,
+        "price": ArmorDBModel.price,
     }

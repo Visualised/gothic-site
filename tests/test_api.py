@@ -150,7 +150,7 @@ class Test_NPCAPI(unittest.TestCase):
             "equipment": ["weapon:65017267-oczy-4079-8b74-760cbc575b45", "armor:345cc691-b59f-4860-8ba0-418b9ae8a672"],
         }
 
-    def get_dataclass_list_from_controller(self):
+    def get_dataclass_list_from_repository(self):
         return self.test_npc_controller.npc_repository._dataclass_list.copy()
 
     def test_get(self):
@@ -161,17 +161,18 @@ class Test_NPCAPI(unittest.TestCase):
         }
         response = self.app_tester.get("/npc", query_string=parameters)
         sorted_dataclass_list = self.test_npc_controller.list(**parameters)
-        self.assertEqual(response.get_json(), [asdict(obj) for obj in sorted_dataclass_list])
+        self.maxDiff = None
+        self.assertEqual(response.get_json(), [obj for obj in sorted_dataclass_list])
 
     def test_get_id(self):
         response = self.app_tester.get(f"/npc/{self.npc_id}")
-        self.assertDictEqual(response.get_json(), asdict(self.test_npc_controller.get(self.npc_id)))
+        self.assertDictEqual(response.get_json(), self.test_npc_controller.get(self.npc_id))
 
     @patch("repositories.npc.JSONNPCRepository.save_to_json")
     def test_post(self, mock_save_to_json: Mock):
-        dataclass_list_before_add = self.get_dataclass_list_from_controller()
+        dataclass_list_before_add = self.get_dataclass_list_from_repository()
         response = self.app_tester.post(f"/npc", json=self.mock_json_user_data)
-        dataclass_list_after_add = self.get_dataclass_list_from_controller()
+        dataclass_list_after_add = self.get_dataclass_list_from_repository()
 
         self.assertNotEqual(dataclass_list_before_add, dataclass_list_after_add)
         self.assertEqual(201, response.status_code)

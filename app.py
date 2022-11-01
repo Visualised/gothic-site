@@ -4,9 +4,13 @@ from api.weapons import WeaponsAPI
 from api.armors import ArmorsAPI
 from api_errors import APIError
 from controllers.npc_controller import NPCController
-from repositories.armors import JSONArmorsRepository
-from repositories.weapons import JSONWeaponsRepository
-from repositories.npc import JSONNPCRepository
+from controllers.weapons_controller import WeaponsController
+from controllers.armors_controller import ArmorsController
+from repositories.armors import JSONArmorsRepository, DBArmorsRepository
+from repositories.weapons import JSONWeaponsRepository, DBWeaponsRepository
+from repositories.npc import JSONNPCRepository, DBNPCRepository
+from models.base import db
+from models.weapons import WeaponDBModel
 from data import (
     WEAPONS_REPOSITORY_JSON_PATH,
     ARMORS_REPOSITORY_JSON_PATH,
@@ -37,9 +41,19 @@ def create_app(weapons_repository, armors_repository, npc_controller, testing: b
 
 
 if __name__ == "__main__":
-    weapons_repository = JSONWeaponsRepository(WEAPONS_REPOSITORY_JSON_PATH)
-    armors_repository = JSONArmorsRepository(ARMORS_REPOSITORY_JSON_PATH)
-    npc_repository = JSONNPCRepository(NPC_REPOSITORY_FILE_PATH)
-    npc_controller = NPCController(npc_repository, weapons_repository, armors_repository)
-    app = create_app(weapons_repository, armors_repository, npc_controller)
+    # weapons_repository = JSONWeaponsRepository(WEAPONS_REPOSITORY_JSON_PATH)
+    weapons_db_repository = DBWeaponsRepository()
+    weapons_controller = WeaponsController(weapons_db_repository)
+    # armors_repository = JSONArmorsRepository(ARMORS_REPOSITORY_JSON_PATH)
+    armors_db_repository = DBArmorsRepository()
+    armors_controller = ArmorsController(armors_db_repository)
+    # npc_repository = JSONNPCRepository(NPC_REPOSITORY_FILE_PATH)
+    npc_db_repository = DBNPCRepository()
+    npc_controller = NPCController(npc_db_repository, weapons_db_repository, armors_db_repository)
+    app = create_app(weapons_controller, armors_controller, npc_controller)
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project.db"
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    db.init_app(app)
+    with app.app_context():
+        db.create_all()
     app.run()
