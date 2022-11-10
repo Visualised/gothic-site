@@ -24,8 +24,9 @@ class NPCAPI(MethodView):
             sort_by = request.args.get(SORT_BY_URL_PARAMETER_NAME, DEFAULT_SORT_BY)
             page = request.args.get(PAGE_NUMBER_URL_PARAMETER_NAME, DEFAULT_PAGE_NUMBER)
             page_size = request.args.get(PAGE_SIZE_URL_PARAMETER_NAME, DEFAULT_PAGE_SIZE)
+            limit_result = True
             try:
-                return self.npc_controller.list(sort_by, int(page), int(page_size)), HTTPStatus.OK
+                return self.npc_controller.list(sort_by, int(page), int(page_size), limit_result), HTTPStatus.OK
             except ValueError:
                 return '"page" and "page_size" parameters needs to be an int', HTTPStatus.BAD_REQUEST
 

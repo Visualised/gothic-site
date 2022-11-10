@@ -11,5 +11,6 @@ class NPCDBModel(db.Model):
     hp: int = db.Column(db.Integer, nullable=False)
     mana: int = db.Column(db.Integer, nullable=False)
     guild: str = db.Column(db.String, nullable=False)
+    avatar: str = db.Column(db.String)
     weapon_id: int = db.Column(db.Integer, db.ForeignKey("weapons.id"))
     armor_id: int = db.Column(db.Integer, db.ForeignKey("armors.id"))

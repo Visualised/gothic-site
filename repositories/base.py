@@ -3,6 +3,7 @@ from dataclasses import asdict
 from api_errors import ObjectDoesNotExist
 from models.base import db
 from sqlalchemy import desc, asc
+from sqlalchemy.orm import load_only, Session
 from data import (
     DEFAULT_PAGE_NUMBER,
     DEFAULT_PAGE_SIZE,

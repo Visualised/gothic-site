@@ -12,4 +12,5 @@ class WeaponDBModel(db.Model):
     required_strength: int = db.Column(db.Integer, nullable=False)
     required_dexterity: int = db.Column(db.Integer, nullable=False)
     type: str = db.Column(db.String, nullable=False)
+    price: int = db.Column(db.Integer, nullable=False)
     npcs = db.relationship("NPCDBModel", backref="weapons")

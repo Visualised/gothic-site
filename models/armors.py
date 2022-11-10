@@ -13,4 +13,4 @@ class ArmorDBModel(db.Model):
     fire_resistance: int = db.Column(db.Integer, nullable=False)
     magic_resistance: int = db.Column(db.Integer, nullable=False)
     price: int = db.Column(db.Integer, nullable=False)
-    npcs = db.relationship("NPCDBModel", backref="armors")
+    npcs = db.relationship("NPCDBModel", backref="armors", lazy=False)
