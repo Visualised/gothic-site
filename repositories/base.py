@@ -1,6 +1,9 @@
 import json, uuid
 from dataclasses import asdict
 from api_errors import ObjectDoesNotExist
+from models.base import db
+from sqlalchemy import desc, asc
+from sqlalchemy.orm import load_only, Session
 from data import (
     DEFAULT_PAGE_NUMBER,
     DEFAULT_PAGE_SIZE,
@@ -25,7 +28,7 @@ class AbstractJSONRepository:
             with open(json_file_path, "r", encoding="utf-8") as f:
                 temp_data = json.load(f)
                 return [self.MODEL(**object) for object in temp_data]
-        except (FileNotFoundError):
+        except FileNotFoundError:
             return []
 
     def save_to_json(self):
@@ -40,6 +43,10 @@ class AbstractJSONRepository:
 
         return found_object[0]
 
+    def get_as_dict(self, id):
+        found_object = self.get(id)
+        return asdict(found_object)
+
     def add(self, json_user_data: dict):
         json_user_data["id"] = str(uuid.uuid4())
         self.clean_data(json_user_data)
@@ -47,7 +54,7 @@ class AbstractJSONRepository:
         self._dataclass_list.append(self.MODEL(**json_user_data))
         self.save_to_json()
 
-    def update(self, id, json_user_data: dict):
+    def update(self, id: str, json_user_data: dict):
         self.clean_data(json_user_data)
         old_object = self.get(id)
         old_object_index = self._dataclass_list.index(old_object)
@@ -83,3 +90,58 @@ class AbstractJSONRepository:
 
         sorted_list = sorted(self._dataclass_list, key=self.SORTED_BY[sort_by], reverse=is_reversed)
         return sorted_list[start:end]
+
+
+class AbstractDBRepository:
+    ORDER_BY = None
+    DB_MODEL = None
+
+    @staticmethod
+    def clean_data(json_user_data: dict):
+        pass
+
+    def get(self, object_id: int):
+        db_query_result = self.DB_MODEL.query.get(object_id)
+
+        return db_query_result
+
+    def add(self, json_user_data: dict):
+        self.clean_data(json_user_data)
+
+        db_object = self.DB_MODEL(**json_user_data)
+
+        db.session.add(db_object)
+        db.session.commit()
+
+    def delete(self, object_id: int):
+        db_query_result = self.DB_MODEL.query.get(object_id)
+
+        db.session.delete(db_query_result)
+        db.session.commit()
+
+    def update(self, object_id: int, json_user_data: dict):
+        self.clean_data(json_user_data)
+        db_query_result = self.DB_MODEL.query.get(object_id)
+
+        for key, value in json_user_data.items():
+            setattr(db_query_result, key, value)
+
+        db.session.commit()
+
+    def list(self, column: str, page: id, page_size: id):
+        # Tutaj mozna tez po prostu dodać do ORDER_BY parę key:value dla pierwszego minusowego znaku
+        # Moje rozumowanie było takie że w ten sposób nie będzie trzeba się dublować
+        # jednakże czuje że w ten sposób spada czytelność i potrzebujemy dwóch dodatkowych importów.
+        # Kusi mnie zrobić to prościej i dodać po prostu key:value w ORDER_BY dla minusów i olać ze będzie to trochę dłuższe
+        # pls advise
+        if column[0] == "-":
+            order_direction = desc
+            column = column[1:]
+        else:
+            order_direction = asc
+
+        db_query_result = self.DB_MODEL.query.order_by(order_direction(self.ORDER_BY[column])).paginate(
+            page=page, per_page=page_size, max_per_page=MAX_PAGE_SIZE
+        )
+
+        return db_query_result.items

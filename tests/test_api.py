@@ -4,16 +4,19 @@ from api_errors import ObjectDoesNotExist
 from app import create_app
 from repositories.weapons import JSONWeaponsRepository
 from repositories.armors import JSONArmorsRepository
+from repositories.npc import JSONNPCRepository
+from controllers.npc_controller import NPCController
 from dataclasses import asdict
 
 JSON_FILE_PATH_WEAPONS = "tests/fixtures/test_weapons_data.json"
 JSON_FILE_PATH_ARMORS = "tests/fixtures/test_armors_data.json"
+JSON_FILE_PATH_NPC = "tests/fixtures/test_npc_data.json"
 
 
-class Test_WeaponsRouter(unittest.TestCase):
+class Test_WeaponsAPI(unittest.TestCase):
     def setUp(self):
         self.test_weapons_repository = JSONWeaponsRepository(JSON_FILE_PATH_WEAPONS)
-        self.app = create_app(self.test_weapons_repository, None, testing=True)
+        self.app = create_app(self.test_weapons_repository, None, None, testing=True)
         self.app_tester = self.app.test_client()
         self.mock_json_user_data = {
             "name": "Wielki Mjeczyk",
@@ -69,10 +72,10 @@ class Test_WeaponsRouter(unittest.TestCase):
         mock_save_to_json.assert_called_once()
 
 
-class Test_ArmorsRouter(unittest.TestCase):
+class Test_ArmorsAPI(unittest.TestCase):
     def setUp(self):
         self.test_armors_repository = JSONArmorsRepository(JSON_FILE_PATH_ARMORS)
-        self.app = create_app(None, self.test_armors_repository, testing=True)
+        self.app = create_app(None, self.test_armors_repository, None, testing=True)
         self.app_tester = self.app.test_client()
         self.mock_json_user_data = {
             "name": "ffffffMega Armor",
@@ -126,6 +129,72 @@ class Test_ArmorsRouter(unittest.TestCase):
         with self.assertRaises(ObjectDoesNotExist):
             self.test_armors_repository.get(armor_id)
 
+        mock_save_to_json.assert_called_once()
+
+
+class Test_NPCAPI(unittest.TestCase):
+    def setUp(self):
+        self.test_npc_controller = NPCController(
+            JSONNPCRepository(JSON_FILE_PATH_NPC),
+            JSONWeaponsRepository(JSON_FILE_PATH_WEAPONS),
+            JSONArmorsRepository(JSON_FILE_PATH_ARMORS),
+        )
+        self.app = create_app(None, None, self.test_npc_controller, testing=True)
+        self.app_tester = self.app.test_client()
+        self.npc_id = "ddac20ed-8033-44b1-b67e-51cd9341fee9"
+        self.mock_json_user_data = {
+            "name": "Canthar",
+            "hp": 260,
+            "mana": 25,
+            "guild": "neutral",
+            "equipment": ["weapon:65017267-oczy-4079-8b74-760cbc575b45", "armor:345cc691-b59f-4860-8ba0-418b9ae8a672"],
+        }
+
+    def get_dataclass_list_from_repository(self):
+        return self.test_npc_controller.npc_repository._dataclass_list.copy()
+
+    def test_get(self):
+        parameters = {
+            "sort_by": "hp",
+            "page": 1,
+            "page_size": 2,
+        }
+        response = self.app_tester.get("/npc", query_string=parameters)
+        sorted_dataclass_list = self.test_npc_controller.list(**parameters)
+        self.maxDiff = None
+        self.assertEqual(response.get_json(), [obj for obj in sorted_dataclass_list])
+
+    def test_get_id(self):
+        response = self.app_tester.get(f"/npc/{self.npc_id}")
+        self.assertDictEqual(response.get_json(), self.test_npc_controller.get(self.npc_id))
+
+    @patch("repositories.npc.JSONNPCRepository.save_to_json")
+    def test_post(self, mock_save_to_json: Mock):
+        dataclass_list_before_add = self.get_dataclass_list_from_repository()
+        response = self.app_tester.post(f"/npc", json=self.mock_json_user_data)
+        dataclass_list_after_add = self.get_dataclass_list_from_repository()
+
+        self.assertNotEqual(dataclass_list_before_add, dataclass_list_after_add)
+        self.assertEqual(201, response.status_code)
+        mock_save_to_json.assert_called_once()
+
+    @patch("repositories.npc.JSONNPCRepository.save_to_json")
+    def test_patch(self, mock_save_to_json: Mock):
+        npc_before_patch = self.app_tester.get(f"/npc/{self.npc_id}")
+        response = self.app_tester.patch(f"/npc/{self.npc_id}", json=self.mock_json_user_data)
+        npc_after_patch = self.app_tester.get(f"/npc/{self.npc_id}")
+
+        self.assertNotEqual(npc_before_patch, npc_after_patch)
+        self.assertEqual(200, response.status_code)
+        mock_save_to_json.assert_called_once()
+
+    @patch("repositories.npc.JSONNPCRepository.save_to_json")
+    def test_delete(self, mock_save_to_json: Mock):
+        response = self.app_tester.delete(f"/npc/{self.npc_id}")
+        is_npc_present = self.app_tester.get(f"/npc/{self.npc_id}")
+
+        self.assertEqual(200, response.status_code)
+        self.assertEqual(404, is_npc_present.status_code)
         mock_save_to_json.assert_called_once()
 
 
