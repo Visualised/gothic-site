@@ -129,11 +129,6 @@ class AbstractDBRepository:
         db.session.commit()
 
     def list(self, column: str, page: id, page_size: id):
-        # Tutaj mozna tez po prostu dodać do ORDER_BY parę key:value dla pierwszego minusowego znaku
-        # Moje rozumowanie było takie że w ten sposób nie będzie trzeba się dublować
-        # jednakże czuje że w ten sposób spada czytelność i potrzebujemy dwóch dodatkowych importów.
-        # Kusi mnie zrobić to prościej i dodać po prostu key:value w ORDER_BY dla minusów i olać ze będzie to trochę dłuższe
-        # pls advise
         if column[0] == "-":
             order_direction = desc
             column = column[1:]
