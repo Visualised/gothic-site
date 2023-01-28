@@ -1,6 +1,5 @@
 from data import NPC, Guild
 from api_errors import WrongGuild
-from models.weapons import WeaponDBModel
 from repositories.base import AbstractJSONRepository, AbstractDBRepository
 from models.npc import NPCDBModel
 

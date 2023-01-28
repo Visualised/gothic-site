@@ -2,7 +2,6 @@ from data import WeaponType, Weapon
 from api_errors import WrongType
 from repositories.base import AbstractJSONRepository, AbstractDBRepository
 from models.weapons import WeaponDBModel
-from models.base import db
 
 
 class JSONWeaponsRepository(AbstractJSONRepository):

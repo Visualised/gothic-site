@@ -3,3 +3,9 @@ data/
 .vscode/
 .pytest_cache/
 .idea/
+venv/
+migrations/
+project.db
+instance/
+alembic/
+alembic.ini
